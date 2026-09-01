@@ -3,228 +3,195 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    
-    <!-- No Referrer Data for CPA Network Safety -->
     <meta name="referrer" content="no-referrer">
-
-    <title>Private Live Cam...</title>
+    <title>Local Profile Match</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-        body, html { height: 100%; width: 100%; background: #000; overflow: hidden; color: #fff; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, Helvetica, sans-serif; }
+        body { background-color: #e9ebee; color: #333; }
 
         /* =========================================
-           1. QUAD-CAM SECURITY SCANNER (4 Corners)
+           1. PROFILE HEADER (Matches the Image)
            ========================================= */
-        #quad-scanner {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999;
-            display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 2px; background: #222;
-        }
-        .cam-feed {
-            background: #050505; position: relative; overflow: hidden;
-            display: flex; justify-content: center; align-items: center;
-        }
-        /* Fake Static/Noise Effect */
-        .cam-feed::before {
-            content: ""; position: absolute; top: -50%; left: -50%; right: -50%; bottom: -50%;
-            background: repeating-linear-gradient(0deg, rgba(255,255,255,0.05) 0px, rgba(255,255,255,0.05) 1px, transparent 1px, transparent 2px);
-            animation: staticNoise 0.2s infinite; opacity: 0.5; pointer-events: none;
-        }
-        @keyframes staticNoise { 0% { transform: translateY(0); } 100% { transform: translateY(10px); } }
+        .profile-container { max-width: 800px; margin: 40px auto; background: #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.1); position: relative; }
         
-        .cam-label { position: absolute; top: 10px; left: 10px; color: #00ff00; font-family: monospace; font-size: 10px; background: rgba(0,0,0,0.6); padding: 2px 5px; }
-        .cam-rec { position: absolute; top: 10px; right: 10px; color: red; font-family: monospace; font-size: 10px; animation: blinker 1s infinite; }
-        
-        /* Central Overlay Text */
-        .scan-overlay {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.85); border: 1px solid #00ff00; padding: 15px 25px;
-            border-radius: 8px; text-align: center; box-shadow: 0 0 20px rgba(0,255,0,0.2); width: 85%; max-width: 300px;
+        /* Red Quote Banner */
+        .quote-banner {
+            background-color: #f75c5c; color: #fff; padding: 10px 20px; font-size: 22px; font-style: italic; font-weight: bold;
+            position: absolute; top: -15px; left: -10px; box-shadow: 2px 2px 5px rgba(0,0,0,0.3); z-index: 2;
         }
-        .scan-text { color: #00ff00; font-family: 'Courier New', monospace; font-size: 14px; font-weight: bold; margin-bottom: 5px; }
-        .scan-sub { color: #aaa; font-family: 'Courier New', monospace; font-size: 11px; }
-        .alert-red { color: #ff3333; border-color: #ff3333; box-shadow: 0 0 20px rgba(255,51,51,0.4); display: none; }
+        .quote-banner::after {
+            content: ''; position: absolute; bottom: -10px; left: 0; border-width: 10px 10px 0 0; border-style: solid; border-color: #c93b3b transparent transparent transparent;
+        }
 
-        @keyframes blinker { 50% { opacity: 0; } }
+        .top-section { background-color: #383838; color: #fff; padding: 60px 40px 20px 40px; display: flex; gap: 30px; }
+        .profile-img { width: 220px; height: 220px; object-fit: cover; border: 2px solid #555; }
+        
+        .profile-details { flex: 1; padding-top: 10px; }
+        .detail-row { display: flex; margin-bottom: 15px; border-bottom: 1px dashed #555; padding-bottom: 10px; }
+        .detail-label { width: 100px; color: #aaa; font-size: 14px; }
+        .detail-value { font-weight: bold; font-size: 16px; }
+        .blue-text { color: #5dade2; cursor: pointer; }
+        .like-btn { background: #3b5998; color: white; border: none; padding: 5px 15px; border-radius: 3px; font-weight: bold; margin-left: 10px; cursor: pointer; }
+
+        /* Availability Section */
+        .availability { background-color: #666; padding: 20px 40px; display: flex; justify-content: space-between; color: #ccc; font-size: 12px; }
+        .day-col { text-align: left; }
+        .day-title { font-weight: bold; color: #fff; margin-bottom: 5px; font-size: 14px; }
+        .day-title.active { color: #2ecc71; }
+        .time-slot { margin: 2px 0; }
+        .time-slot.active { color: #fff; font-weight: bold; }
+
+        /* Bio Section */
+        .bio-section { background-color: #fff; padding: 30px 40px; }
+        .bio-title { font-size: 24px; color: #333; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        .bio-text { font-size: 16px; line-height: 1.6; color: #555; margin-bottom: 15px; }
 
         /* =========================================
-           2. INCOMING VIDEO CALL UI (No Names)
+           2. THE "GAME CHANGER" FUNNEL (Hidden Trap)
            ========================================= */
-        #main-content { display: none; height: 100%; width: 100%; position: relative; }
+        #chat-notification {
+            position: fixed; bottom: -100px; right: 20px; background: #fff; border-radius: 8px; box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+            width: 300px; padding: 15px; display: flex; align-items: center; gap: 15px; transition: bottom 0.5s ease; z-index: 1000; cursor: pointer; border-left: 5px solid #2ecc71;
+        }
+        #chat-notification.show { bottom: 20px; }
+        .chat-img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; }
+        .chat-text h4 { font-size: 14px; margin-bottom: 5px; display: flex; align-items: center; gap: 5px; }
+        .online-dot { width: 8px; height: 8px; background: #2ecc71; border-radius: 50%; display: inline-block; animation: blink 1.5s infinite; }
+        .chat-text p { font-size: 13px; color: #666; }
+
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* Full Screen Funnel Overlay */
+        #funnel-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px);
+            z-index: 2000; display: none; justify-content: center; align-items: center;
+        }
+        .funnel-box { background: #fff; width: 90%; max-width: 400px; border-radius: 10px; padding: 30px 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .funnel-title { font-size: 22px; color: #d32f2f; margin-bottom: 10px; font-weight: bold; }
+        .funnel-question { font-size: 18px; margin-bottom: 25px; color: #333; font-weight: bold; }
         
-        .bg-video {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: url('https://images.unsplash.com/photo-1616788225565-d06992ee6491?q=80&w=1000&auto=format&fit=crop') center center/cover;
-            filter: blur(18px) brightness(0.3); z-index: 1; transform: scale(1.1);
+        .btn-group { display: flex; gap: 15px; justify-content: center; }
+        .f-btn { 
+            flex: 1; padding: 12px; font-size: 16px; font-weight: bold; border: none; border-radius: 5px; cursor: pointer;
+            background: #e0e0e0; color: #333; transition: 0.3s;
         }
-
-        .call-interface {
-            position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column;
-            justify-content: space-between; align-items: center; padding: 60px 20px 40px;
-        }
-
-        .caller-info { text-align: center; }
-        .caller-icon { font-size: 60px; margin-bottom: 15px; animation: float 3s ease-in-out infinite; }
-        .caller-name { font-size: 26px; font-weight: 300; letter-spacing: 1.5px; color: #fff; margin-bottom: 8px; }
-        .call-status { font-size: 14px; color: #00ff66; font-family: monospace; background: rgba(0,255,102,0.1); padding: 4px 10px; border-radius: 20px; animation: blinker 1.5s infinite; display: inline-block; }
-
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-
-        .action-buttons { display: flex; gap: 40px; margin-bottom: 20px; }
+        .f-btn-yes { background: #2ecc71; color: white; }
+        .f-btn-yes:hover { background: #27ae60; }
         
-        .btn { width: 75px; height: 75px; border-radius: 50%; border: none; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: transform 0.2s; }
-        .btn:active { transform: scale(0.9); }
-        .btn-decline { background: rgba(255, 59, 48, 0.9); backdrop-filter: blur(5px); }
-        .btn-accept { background: #34c759; box-shadow: 0 0 25px rgba(52, 199, 89, 0.6); animation: pulse-green 1.5s infinite; }
-        .btn svg { width: 35px; height: 35px; fill: #fff; }
-
-        @keyframes pulse-green {
-            0% { box-shadow: 0 0 0 0 rgba(52, 199, 89, 0.7); }
-            70% { box-shadow: 0 0 0 25px rgba(52, 199, 89, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(52, 199, 89, 0); }
-        }
-
-        /* Verification Popup */
-        .popup {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.8);
-            background: rgba(15, 15, 18, 0.95); backdrop-filter: blur(15px); border: 1px solid rgba(255, 42, 133, 0.3);
-            width: 90%; max-width: 360px; border-radius: 20px; padding: 35px 25px; text-align: center;
-            z-index: 10; opacity: 0; visibility: hidden; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-            box-shadow: 0 30px 60px rgba(0,0,0,0.9);
-        }
-        .popup.active { opacity: 1; visibility: visible; transform: translate(-50%, -50%) scale(1); }
-        .popup-icon { font-size: 45px; margin-bottom: 10px; }
-        .popup h3 { font-size: 20px; margin-bottom: 12px; color: #fff; font-weight: 600; }
-        .popup p { font-size: 13px; color: #aaa; margin-bottom: 25px; line-height: 1.6; }
-        
-        .verify-btn {
-            background: linear-gradient(135deg, #ff2a85, #ff7b00); color: #fff; border: none;
-            width: 100%; padding: 16px; border-radius: 12px; font-size: 15px; font-weight: bold;
-            cursor: pointer; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 10px 20px rgba(255, 42, 133, 0.3);
-        }
+        #loading-text { display: none; color: #e74c3c; font-weight: bold; margin-top: 15px; }
     </style>
 </head>
 <body>
 
-    <!-- 1. QUAD-CAM SCANNER (Anti-VPN & Connection Screen) -->
-    <div id="quad-scanner">
-        <div class="cam-feed"><span class="cam-label">CAM 01: OFFLINE</span></div>
-        <div class="cam-feed"><span class="cam-label">CAM 02: SEARCHING</span></div>
-        <div class="cam-feed"><span class="cam-label">CAM 03: OFFLINE</span></div>
-        <div class="cam-feed"><span class="cam-label">CAM 04: CONNECTING</span><span class="cam-rec">REC</span></div>
+    <!-- 1. MAIN PROFILE (Mimics your image perfectly) -->
+    <div class="profile-container">
+        <div class="quote-banner">" I just want closeness with someone and a sex contact "</div>
         
-        <div class="scan-overlay" id="scan-box">
-            <div class="scan-text" id="scan-title">SEARCHING LIVE CAMS...</div>
-            <div class="scan-sub" id="scan-desc">Bypassing local network security</div>
+        <div class="top-section">
+            <!-- You can replace this image link with your original image later -->
+            <img src="https://images.unsplash.com/photo-1595959183082-7b570b7e08e2?q=80&w=400&auto=format&fit=crop" alt="Profile" class="profile-img" id="main-img">
+            
+            <div class="profile-details">
+                <div class="detail-row"><div class="detail-label">My name is:</div><div class="detail-value">Joyswithinmuah</div></div>
+                <div class="detail-row"><div class="detail-label">My age:</div><div class="detail-value">33 Years old</div></div>
+                <div class="detail-row"><div class="detail-label">I live in:</div><div class="detail-value">Huddersfield <span class="blue-text">(Yorkshire Humber)</span></div></div>
+                <div class="detail-row" style="border: none;"><div class="detail-label">Like me?</div><div class="detail-value">77 Likes <button class="like-btn" onclick="startFunnel()">Like me!</button></div></div>
+            </div>
+        </div>
+
+        <div class="availability">
+            <div class="day-col"><div class="day-title">Mon 31</div><div class="time-slot">Morning</div><div class="time-slot">Afternoon</div><div class="time-slot">Evening</div></div>
+            <div class="day-col"><div class="day-title active">Today</div><div class="time-slot active">Morning</div><div class="time-slot active">Afternoon</div><div class="time-slot active">Evening</div></div>
+            <div class="day-col"><div class="day-title">Wed 2</div><div class="time-slot">Morning</div><div class="time-slot">Afternoon</div><div class="time-slot">Evening</div></div>
+            <div class="day-col"><div class="day-title">Thu 3</div><div class="time-slot">Morning</div><div class="time-slot">Afternoon</div><div class="time-slot">Evening</div></div>
+            <div class="day-col"><div class="day-title">Fri 4</div><div class="time-slot">Morning</div><div class="time-slot">Afternoon</div><div class="time-slot">Evening</div></div>
+            <div class="day-col"><div class="day-title">Sat 5</div><div class="time-slot">Morning</div><div class="time-slot">Afternoon</div><div class="time-slot">Evening</div></div>
+            <div class="day-col"><div class="day-title">Sun 6</div><div class="time-slot">Morning</div><div class="time-slot">Afternoon</div><div class="time-slot">Evening</div></div>
+        </div>
+
+        <div class="bio-section">
+            <div class="bio-title">📝 Joyswithinmuah(33) Writes:</div>
+            <p class="bio-text">I have great friends, a nice apartment and I am happy with my job. I even have a cute cat, but that is not so important at the moment. I miss sex in my life and by that I mean nothing in terms of feelings.</p>
+            <p class="bio-text">I just want physical closeness with someone and a sex contact especially for me who can fuck me forever, without interruption. I never find something like that here in Huddersfield , hence this online profile, with which I may reach more men than in our local pub haha.</p>
         </div>
     </div>
 
-    <!-- 2. MAIN LANDING PAGE (Anonymous Call UI) -->
-    <div id="main-content">
-        <div class="bg-video"></div>
-        
-        <div class="call-interface">
-            <div class="caller-info">
-                <div class="caller-icon">👤</div>
-                <div class="caller-name">Private Connection</div>
-                <div class="call-status">● LIVE CAM REQUESTED</div>
-            </div>
+    <!-- 2. THE CHAT HOOK -->
+    <div id="chat-notification" onclick="startFunnel()">
+        <img src="https://images.unsplash.com/photo-1595959183082-7b570b7e08e2?q=80&w=100&auto=format&fit=crop" class="chat-img" alt="Chat">
+        <div class="chat-text">
+            <h4>Joyswithinmuah <span class="online-dot"></span></h4>
+            <p>Hey, I saw you looking at my profile. Are you free tonight? 😘</p>
+        </div>
+    </div>
 
-            <div class="action-buttons">
-                <!-- Decline Button triggers the same popup (Trap!) -->
-                <button class="btn btn-decline" onclick="showPopup()">
-                    <svg viewBox="0 0 24 24"><path d="M12 9c-1.6 0-3.15.25-4.6.72v3.1c0 .39-.23.74-.56.9-.98.49-1.87 1.12-2.66 1.85-.18.18-.43.28-.7.28-.28 0-.53-.11-.71-.29L.29 13.08c-.18-.17-.29-.42-.29-.7 0-.28.11-.53.29-.71C3.34 8.78 7.46 7 12 7s8.66 1.78 11.71 4.67c.18.18.29.43.29.71 0 .28-.11.53-.29.71l-2.48 2.48c-.18.18-.43.29-.71.29-.27 0-.52-.11-.7-.28-.79-.74-1.69-1.36-2.67-1.85-.33-.16-.56-.5-.56-.9v-3.1C15.15 9.25 13.6 9 12 9z"/></svg>
-                </button>
-                <button class="btn btn-accept" onclick="showPopup()">
-                    <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
-                </button>
+    <!-- 3. THE MICRO-COMMITMENT FUNNEL -->
+    <div id="funnel-overlay">
+        <div class="funnel-box" id="step-1">
+            <div class="funnel-title">WARNING! 🔞</div>
+            <div class="funnel-question">Do you agree to keep this encounter a secret?</div>
+            <div class="btn-group">
+                <button class="f-btn" onclick="nextStep(2)">NO</button>
+                <button class="f-btn f-btn-yes" onclick="nextStep(2)">YES</button>
             </div>
         </div>
 
-        <!-- Pop-up for Redirect -->
-        <div class="popup" id="verify-popup">
-            <div class="popup-icon">🔞</div>
-            <h3>Stream Locked</h3>
-            <p>This is an uncensored private broadcast. You must quickly verify your age to unblur the video and start the session.</p>
-            <button class="verify-btn" onclick="goToOffer()">VERIFY TO WATCH</button>
-            <div style="font-size: 11px; color: #666; margin-top: 15px; font-family: monospace;">Secured via P2P Encryption</div>
+        <div class="funnel-box" id="step-2" style="display: none;">
+            <div class="funnel-title">Final Verification</div>
+            <div class="funnel-question">Are you over 18 years old?</div>
+            <div class="btn-group">
+                <button class="f-btn" onclick="nextStep(3)">NO</button>
+                <button class="f-btn f-btn-yes" onclick="nextStep(3)">YES</button>
+            </div>
+        </div>
+
+        <div class="funnel-box" id="step-3" style="display: none;">
+            <div class="funnel-title" style="color: #2ecc71;">Verification Successful!</div>
+            <div class="funnel-question">Click below to see my private photos and reply to my message.</div>
+            <button class="f-btn f-btn-yes" style="width: 100%; padding: 15px; font-size: 18px;" onclick="goToOffer()">CONTINUE TO CHAT ✉️</button>
+            <div id="loading-text">Connecting securely...</div>
         </div>
     </div>
 
     <script>
-        // 👇 আপনার সিপিএ লিংক এখানে বসান
+        // 👇 আপনার সিপিএ লিংক (Smartlink) এখানে বসান 
         const CPA_LINK = "https://shroo.link/esAkE"; 
 
-        // ===============================================
-        // MASTERMIND 4-CAM SCANNER LOGIC
-        // ===============================================
-        async function runDeepScan() {
-            let scanBox = document.getElementById('scan-box');
-            let title = document.getElementById('scan-title');
-            let desc = document.getElementById('scan-desc');
-            let quadScanner = document.getElementById('quad-scanner');
-            let mainContent = document.getElementById('main-content');
+        // 1. Show Fake Chat Notification after 3 seconds
+        setTimeout(() => {
+            document.getElementById('chat-notification').classList.add('show');
+            // Play a notification sound (optional, browsers may block auto-play)
+            let audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
+            audio.play().catch(e => {}); 
+        }, 3000);
 
-            // Animation sequence
-            setTimeout(() => { desc.innerText = "Checking IP Reputation..."; }, 800);
-            setTimeout(() => { desc.innerText = "Detecting proxy/VPN tunnels..."; }, 1600);
-
-            try {
-                let res = await fetch('https://ipwho.is/');
-                let data = await res.json();
-                
-                // If VPN/Proxy/Bot is detected
-                if (data.success && data.security && (data.security.vpn || data.security.proxy || data.security.tor || data.security.hosting)) {
-                    await new Promise(r => setTimeout(r, 600));
-                    scanBox.classList.add('alert-red');
-                    title.innerText = "ACCESS DENIED";
-                    title.style.color = "#ff3333";
-                    desc.innerText = "VPN/Proxy Detected. Connection Terminated.";
-                    desc.style.color = "#ff3333";
-                    
-                    // Kicks fake traffic out to Google
-                    setTimeout(() => { window.location.replace("https://www.google.com"); }, 2000);
-                    return; 
-                }
-            } catch(e) {}
-
-            // If Traffic is Clean -> Match Found
-            setTimeout(() => { 
-                title.innerText = "LOCAL MATCH FOUND!";
-                desc.innerText = "Establishing direct P2P connection...";
-                title.style.color = "#fff";
-                scanBox.style.background = "#34c759";
-                scanBox.style.borderColor = "#34c759";
-                scanBox.style.boxShadow = "0 0 30px rgba(52, 199, 89, 0.5)";
-            }, 2500);
-
-            // Transition to Main Call UI
-            setTimeout(() => {
-                quadScanner.style.display = 'none';
-                mainContent.style.display = 'block';
-            }, 3500);
+        // 2. Start the Funnel
+        function startFunnel() {
+            document.getElementById('chat-notification').classList.remove('show');
+            document.getElementById('funnel-overlay').style.display = 'flex';
         }
 
-        window.onload = runDeepScan;
-
-        // ===============================================
-        // UI INTERACTIONS & TRAPS
-        // ===============================================
-        function showPopup() {
-            // Makes the background even darker and more blurred
-            document.querySelector('.bg-video').style.filter = "blur(30px) brightness(0.15)";
-            document.querySelector('.call-interface').style.display = "none";
-            document.getElementById('verify-popup').classList.add('active');
+        // 3. Handle Question Steps
+        function nextStep(stepNumber) {
+            // Hide all steps
+            document.getElementById('step-1').style.display = 'none';
+            document.getElementById('step-2').style.display = 'none';
+            
+            // Show target step
+            document.getElementById('step-' + stepNumber).style.display = 'block';
         }
 
+        // 4. Final Redirect to CPA Offer
         function goToOffer() {
-            let btn = document.querySelector('.verify-btn');
-            btn.innerHTML = "DECRYPTING STREAM... ⏳";
-            btn.style.background = "#333";
-            btn.style.boxShadow = "none";
+            let btn = document.querySelector('#step-3 .f-btn-yes');
+            let loadingText = document.getElementById('loading-text');
+            
+            btn.style.display = 'none';
+            loadingText.style.display = 'block';
             
             setTimeout(() => {
                 window.location.replace(CPA_LINK);
-            }, 1000);
+            }, 800);
         }
     </script>
 </body>
