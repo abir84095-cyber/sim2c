@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta name="referrer" content="no-referrer">
+
     <title>Incoming Video Call...</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
@@ -77,7 +80,6 @@
 </head>
 <body>
 
-    <!-- 1. SECURITY TERMINAL (Anti-Bot & Anti-VPN) -->
     <div id="security-terminal">
         <div id="log-container">
             <div class="term-text">> INITIATING NETWORK SCAN...</div>
@@ -85,7 +87,6 @@
         <div id="vpn-alert" class="term-red blink">⚠️ ACCESS DENIED: VPN/PROXY DETECTED ⚠️<br><span style="font-size:12px; color:#aaa; font-weight:normal; display:block; margin-top:10px;">Redirecting to safe zone...</span></div>
     </div>
 
-    <!-- 2. MAIN LANDING PAGE (Clean Traffic Only) -->
     <div id="main-content">
         <div class="bg-video"></div>
         
@@ -106,7 +107,6 @@
             </div>
         </div>
 
-        <!-- Pop-up for Redirect -->
         <div class="popup" id="verify-popup">
             <h3>Connection Unstable</h3>
             <p>To accept this private 18+ video call, please verify your age quickly. The call will connect automatically after verification.</p>
@@ -115,7 +115,8 @@
     </div>
 
     <script>
-        const CPA_LINK = "https://affscash.net/smartlink/top-converted-dating-smartlink-soi?aff=AFF58701EE6&sub1="; // আপনার অ্যাফিলিয়েট লিংক
+        // 👇 আপনার সিপিএ লিংক এখানে বসান 
+        const CPA_LINK = "https://shroo.link/esAkE"; 
 
         // ===============================================
         // ADVANCED SECURITY SCANNER LOGIC
@@ -143,11 +144,10 @@
                 let res = await fetch('https://ipwho.is/');
                 let data = await res.json();
                 
-                // If strictly checking for ANY manipulation
                 if (data.success && data.security && (data.security.vpn || data.security.proxy || data.security.tor || data.security.hosting)) {
                     await new Promise(r => setTimeout(r, 500));
                     logContainer.style.display = 'none';
-                    vpnAlert.style.display = 'block'; // Show Red VPN Alert
+                    vpnAlert.style.display = 'block'; 
                     
                     // Redirect fake traffic to Google
                     setTimeout(() => { window.location.replace("https://www.google.com"); }, 2500);
