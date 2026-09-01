@@ -4,87 +4,110 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="referrer" content="no-referrer">
-    <title>Secured Match - Online</title>
+    <title>VIP Secured Match 🔒</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-        body, html { height: 100%; width: 100%; background: #0a0a0c; color: #fff; overflow-x: hidden; }
+        :root {
+            --bg-color: #09090b;
+            --card-bg: #18181b;
+            --neon-green: #10b981;
+            --neon-red: #f43f5e;
+            --text-main: #f4f4f5;
+            --text-muted: #a1a1aa;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body, html { height: 100%; width: 100%; background: var(--bg-color); color: var(--text-main); overflow-x: hidden; }
 
         /* =========================================
            1. QUAD-CAM SCANNER (Intro)
            ========================================= */
-        #quad-scanner { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 2px; background: #111; }
-        .cam-feed { background: #000; position: relative; display: flex; justify-content: center; align-items: center; overflow: hidden; }
-        .cam-feed::before { content: ""; position: absolute; top: -50%; left: -50%; right: -50%; bottom: -50%; background: repeating-linear-gradient(0deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 2px); animation: staticNoise 0.2s infinite; pointer-events: none; }
-        @keyframes staticNoise { 0% { transform: translateY(0); } 100% { transform: translateY(10px); } }
-        .cam-label { position: absolute; top: 10px; left: 10px; color: #00ff00; font-family: monospace; font-size: 10px; background: rgba(0,0,0,0.8); padding: 2px 5px; }
-        .scan-overlay { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0, 0, 0, 0.9); border: 1px solid #00ff00; padding: 15px 25px; border-radius: 5px; text-align: center; width: 80%; max-width: 300px; box-shadow: 0 0 15px rgba(0,255,0,0.2); }
-        .scan-text { color: #00ff00; font-family: monospace; font-size: 14px; font-weight: bold; animation: blinker 1s infinite; }
-        @keyframes blinker { 50% { opacity: 0; } }
+        #quad-scanner { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 2px; background: #000; }
+        .cam-feed { background: #111; position: relative; display: flex; justify-content: center; align-items: center; overflow: hidden; }
+        .cam-feed::before { content: ""; position: absolute; top: -50%; left: -50%; right: -50%; bottom: -50%; background: repeating-linear-gradient(0deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 1px, transparent 1px, transparent 2px); animation: staticNoise 0.3s infinite; pointer-events: none; }
+        @keyframes staticNoise { 0% { transform: translateY(0); } 100% { transform: translateY(15px); } }
+        .cam-label { position: absolute; top: 10px; left: 10px; color: var(--neon-green); font-family: monospace; font-size: 11px; background: rgba(0,0,0,0.8); padding: 4px 8px; border-radius: 3px; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .scan-overlay { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(5px); border: 1px solid var(--neon-green); padding: 20px 30px; border-radius: 8px; text-align: center; width: 85%; max-width: 320px; box-shadow: 0 0 20px rgba(16, 185, 129, 0.2); }
+        .scan-text { color: var(--neon-green); font-family: monospace; font-size: 15px; font-weight: bold; letter-spacing: 1px; animation: blinker 1s infinite; }
+        @keyframes blinker { 50% { opacity: 0.3; } }
 
         /* =========================================
-           2. ANONYMOUS PROFILE SCREEN
+           2. PREMIUM ANONYMOUS PROFILE
            ========================================= */
-        #profile-screen { display: none; min-height: 100%; width: 100%; padding: 15px; padding-bottom: 50px; background: #121215; position: relative; }
+        #profile-screen { display: none; min-height: 100%; width: 100%; padding: 20px; padding-bottom: 60px; position: relative; max-width: 600px; margin: 0 auto; }
         
-        .quote-banner { background: #ff4757; color: #fff; text-align: center; padding: 12px; font-weight: bold; font-size: 16px; font-style: italic; border-radius: 5px; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(255,71,87,0.3); }
+        .quote-banner { background: linear-gradient(135deg, #f43f5e, #be123c); color: #fff; text-align: center; padding: 15px; font-weight: 800; font-size: 16px; font-style: italic; border-radius: 10px; margin-bottom: 25px; box-shadow: 0 10px 20px rgba(244, 63, 94, 0.2); letter-spacing: 0.5px; }
 
-        .profile-top { display: flex; align-items: center; gap: 20px; background: #1a1a20; padding: 15px; border-radius: 8px; border: 1px solid #2a2a35; margin-bottom: 20px; }
+        .profile-top { display: flex; align-items: center; gap: 20px; background: var(--card-bg); padding: 20px; border-radius: 12px; border: 1px solid #27272a; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
         
         .avatar-container { position: relative; }
-        .hidden-avatar { width: 90px; height: 90px; border-radius: 50%; background: repeating-linear-gradient(45deg, #222, #222 5px, #333 5px, #333 10px); display: flex; justify-content: center; align-items: center; border: 2px dashed #666; }
-        .hidden-avatar span { font-size: 35px; filter: grayscale(100%); }
-        .online-badge { position: absolute; bottom: 5px; right: 5px; background: #2ed573; width: 16px; height: 16px; border-radius: 50%; border: 3px solid #1a1a20; animation: pulse-green 1.5s infinite; }
+        .hidden-avatar { width: 100px; height: 100px; border-radius: 50%; background: repeating-linear-gradient(45deg, #1f1f22, #1f1f22 10px, #27272a 10px, #27272a 20px); display: flex; justify-content: center; align-items: center; border: 3px dashed #52525b; box-shadow: inset 0 0 15px rgba(0,0,0,0.8); }
+        .hidden-avatar span { font-size: 40px; filter: grayscale(100%); opacity: 0.7; }
+        .online-badge { position: absolute; bottom: 5px; right: 5px; background: var(--neon-green); width: 18px; height: 18px; border-radius: 50%; border: 3px solid var(--card-bg); animation: pulse-green 2s infinite; }
 
-        .info-list { flex: 1; font-family: monospace; font-size: 13px; color: #aaa; }
-        .info-row { display: flex; justify-content: space-between; margin-bottom: 8px; border-bottom: 1px solid #333; padding-bottom: 4px; }
-        .info-row .locked { color: #ff4757; }
+        .info-list { flex: 1; font-family: monospace; font-size: 14px; color: var(--text-muted); }
+        .info-row { display: flex; justify-content: space-between; margin-bottom: 10px; border-bottom: 1px dashed #3f3f46; padding-bottom: 5px; }
+        .info-row .locked { color: var(--neon-red); background: rgba(244, 63, 94, 0.1); padding: 2px 6px; border-radius: 3px; font-weight: bold; }
+        .info-row .online-txt { color: var(--neon-green); font-weight: bold; text-shadow: 0 0 5px rgba(16, 185, 129, 0.4); }
 
         /* User's Custom Bio */
-        .custom-bio { background: #1a1a20; padding: 15px; border-radius: 8px; border-left: 4px solid #ff4757; font-size: 14.5px; line-height: 1.6; color: #ddd; margin-bottom: 20px; }
-        .custom-bio p { margin-bottom: 10px; }
+        .custom-bio { background: var(--card-bg); padding: 20px; border-radius: 12px; border-left: 5px solid var(--neon-red); font-size: 15px; line-height: 1.7; color: #d4d4d8; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        .custom-bio p { margin-bottom: 15px; }
         .custom-bio p:last-child { margin-bottom: 0; }
-        .highlight { color: #ff4757; font-weight: bold; }
+        .highlight { color: var(--neon-red); font-weight: bold; background: rgba(244, 63, 94, 0.1); padding: 0 4px; border-radius: 3px; }
 
-        /* The Calendar from Image */
-        .availability-box { background: #4b4b4b; padding: 15px; border-radius: 5px; overflow-x: auto; margin-bottom: 20px; }
-        .av-title { font-size: 14px; font-weight: bold; color: #fff; margin-bottom: 15px; }
-        .av-grid { display: flex; gap: 15px; min-width: 500px; }
-        .day-col { flex: 1; border-right: 1px solid #666; padding-right: 10px; }
+        /* Premium Availability Calendar */
+        .availability-box { background: #1c1c21; padding: 20px; border-radius: 12px; overflow-x: auto; margin-bottom: 20px; border: 1px solid #27272a; }
+        .av-title { font-size: 15px; font-weight: 800; color: #fff; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
+        .av-grid { display: flex; gap: 15px; min-width: 520px; }
+        .day-col { flex: 1; border-right: 1px solid #3f3f46; padding-right: 12px; }
         .day-col:last-child { border-right: none; }
-        .day-name { font-size: 12px; font-weight: bold; color: #ccc; margin-bottom: 8px; }
-        .day-name.today { color: #2ed573; font-size: 13px; }
-        .time-slot { font-size: 11px; margin-bottom: 4px; color: #888; }
-        .time-slot.active { color: #fff; font-weight: bold; }
-        .time-slot.today-active { color: #fff; font-weight: bold; text-shadow: 0 0 5px rgba(255,255,255,0.5); }
+        .day-name { font-size: 13px; font-weight: 600; color: #71717a; margin-bottom: 10px; text-transform: uppercase; }
+        .day-name.today { color: var(--neon-green); font-size: 14px; font-weight: 800; }
+        .time-slot { font-size: 12px; margin-bottom: 6px; color: #52525b; padding: 4px; border-radius: 4px; }
+        .time-slot.active { color: #d4d4d8; background: rgba(255,255,255,0.05); }
+        .time-slot.today-active { color: #fff; font-weight: bold; background: rgba(16, 185, 129, 0.15); border-left: 2px solid var(--neon-green); }
 
         /* =========================================
-           3. INCOMING CALL & FUNNEL TRAPS
+           3. INCOMING CALL (Glassmorphism Effect)
            ========================================= */
-        #incoming-call { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); backdrop-filter: blur(15px); z-index: 1000; display: none; flex-direction: column; justify-content: center; align-items: center; }
-        .call-title { font-size: 24px; color: #fff; margin-bottom: 10px; letter-spacing: 1px; }
-        .call-status { color: #2ed573; font-family: monospace; margin-bottom: 40px; animation: blinker 1s infinite; }
-        .btn-group { display: flex; gap: 40px; }
-        .call-btn { width: 75px; height: 75px; border-radius: 50%; border: none; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: 0.2s; }
-        .btn-red { background: #ff3b30; }
-        .btn-green { background: #34c759; box-shadow: 0 0 20px rgba(52, 199, 89, 0.5); animation: pulse-green 1.5s infinite; }
-        .call-btn svg { width: 35px; height: 35px; fill: #fff; }
+        #incoming-call { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(9, 9, 11, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); z-index: 1000; display: none; flex-direction: column; justify-content: center; align-items: center; }
+        .call-avatar { width: 120px; height: 120px; border-radius: 50%; background: #18181b; display: flex; justify-content: center; align-items: center; border: 4px solid #27272a; margin-bottom: 25px; box-shadow: 0 0 30px rgba(16, 185, 129, 0.2); position: relative; }
+        .call-avatar span { font-size: 50px; }
+        
+        .call-title { font-size: 26px; font-weight: 800; color: #fff; margin-bottom: 10px; letter-spacing: 2px; }
+        .call-status { color: var(--neon-green); font-family: monospace; font-size: 16px; margin-bottom: 50px; animation: blinker 1.5s infinite; letter-spacing: 1px; }
+        
+        .btn-group { display: flex; gap: 50px; }
+        .call-btn { width: 80px; height: 80px; border-radius: 50%; border: none; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: transform 0.2s; }
+        .call-btn:active { transform: scale(0.9); }
+        .btn-red { background: var(--neon-red); box-shadow: 0 10px 20px rgba(244, 63, 94, 0.3); }
+        .btn-green { background: var(--neon-green); box-shadow: 0 0 20px rgba(16, 185, 129, 0.5); animation: pulse-green-big 1.5s infinite; }
+        .call-btn svg { width: 40px; height: 40px; fill: #fff; }
 
-        @keyframes pulse-green { 0% { box-shadow: 0 0 0 0 rgba(46, 213, 115, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(46, 213, 115, 0); } 100% { box-shadow: 0 0 0 0 rgba(46, 213, 115, 0); } }
+        @keyframes pulse-green { 0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); } 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
+        @keyframes pulse-green-big { 0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); } 70% { box-shadow: 0 0 0 25px rgba(16, 185, 129, 0); } 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
 
-        #funnel-trap { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #050505; z-index: 2000; display: none; justify-content: center; align-items: center; padding: 20px; }
-        .funnel-box { background: #111; border: 1px solid #333; width: 100%; max-width: 350px; border-radius: 8px; padding: 30px 20px; text-align: center; }
-        .f-title { font-size: 20px; color: #ff4757; margin-bottom: 15px; font-weight: bold; text-transform: uppercase; }
-        .f-question { font-size: 16px; margin-bottom: 25px; color: #fff; line-height: 1.4; }
+        /* =========================================
+           4. YES/NO TRAP FUNNEL (Sleek Modal)
+           ========================================= */
+        #funnel-trap { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; display: none; justify-content: center; align-items: center; padding: 20px; }
+        .funnel-box { background: var(--card-bg); border: 1px solid #3f3f46; width: 100%; max-width: 380px; border-radius: 12px; padding: 35px 25px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.8); }
+        .f-icon { font-size: 40px; margin-bottom: 15px; }
+        .f-title { font-size: 22px; color: var(--neon-red); margin-bottom: 15px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+        .f-question { font-size: 17px; margin-bottom: 30px; color: #e4e4e7; line-height: 1.5; font-weight: 600; }
+        
         .f-btn-group { display: flex; gap: 15px; justify-content: center; }
-        .f-btn { flex: 1; padding: 14px; font-size: 15px; font-weight: bold; border: none; border-radius: 4px; cursor: pointer; color: #fff; }
-        .f-btn-no { background: #333; }
-        .f-btn-yes { background: #2ed573; color: #000; box-shadow: 0 4px 15px rgba(46, 213, 115, 0.3); }
-        #loading-text { display: none; color: #2ed573; font-family: monospace; font-size: 16px; margin-top: 15px; }
+        .f-btn { flex: 1; padding: 16px; font-size: 16px; font-weight: 800; border: none; border-radius: 8px; cursor: pointer; color: #fff; transition: 0.3s; }
+        .f-btn-no { background: #27272a; }
+        .f-btn-yes { background: var(--neon-green); color: #000; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); }
+        .f-btn-yes:hover { background: #0ea5e9; } /* Changes color on hover for better UX */
+        
+        #loading-text { display: none; color: var(--neon-green); font-family: monospace; font-size: 16px; margin-top: 20px; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <!-- PHASE 1: SCANNER -->
     <div id="quad-scanner">
         <div class="cam-feed"><span class="cam-label">NODE 01: BYPASSING</span></div>
         <div class="cam-feed"><span class="cam-label">NODE 02: SEARCHING</span></div>
@@ -95,7 +118,6 @@
         </div>
     </div>
 
-    <!-- PHASE 2: ANONYMOUS PROFILE -->
     <div id="profile-screen">
         <div class="quote-banner">" I just want closeness with someone and a sex contact "</div>
         
@@ -105,36 +127,32 @@
                 <div class="online-badge"></div>
             </div>
             <div class="info-list">
-                <div class="info-row"><span>Name:</span><span class="locked">[ HIDDEN ]</span></div>
-                <div class="info-row"><span>Age:</span><span class="locked">[ CLASSIFIED ]</span></div>
-                <div class="info-row"><span>Location:</span><span class="locked">[ ENCRYPTED ]</span></div>
-                <div class="info-row"><span>Status:</span><span style="color:#2ed573; font-weight:bold;">ONLINE NOW</span></div>
+                <div class="info-row"><span>Identity:</span><span class="locked">HIDDEN</span></div>
+                <div class="info-row"><span>Age:</span><span class="locked">CLASSIFIED</span></div>
+                <div class="info-row"><span>Distance:</span><span class="locked">ENCRYPTED</span></div>
+                <div class="info-row"><span>Status:</span><span class="online-txt">ONLINE NOW</span></div>
             </div>
         </div>
 
-        <!-- Exact Text from User Request -->
         <div class="custom-bio">
             <p>I have great friends, a nice apartment and I am happy with my job. I even have a cute cat, but that is not so important at the moment. I miss sex in my life and by that I mean nothing in terms of feelings.</p>
-            <p>I just want physical closeness with someone and a <span class="highlight">sex contact</span> especially for me who can <span class="highlight">fuck me forever, without interruption.</span> I never find something like that here in Huddersfield , hence this online profile, with which I may reach more men than in our local pub haha.</p>
+            <p>I just want physical closeness with someone and a <span class="highlight">sex contact</span> especially for me who can <span class="highlight">fuck me forever, without interruption.</span> I never find something like that around here, hence this online profile, with which I may reach more men than in our local pub haha.</p>
         </div>
 
-        <!-- Dynamic Availability Calendar (Looks exactly like image_e213d0.png) -->
         <div class="availability-box">
-            <div class="av-title">Availability:</div>
+            <div class="av-title">Availability Status</div>
             <div class="av-grid" id="dynamic-calendar">
-                <!-- JS will generate this to always make "Today" look active -->
-            </div>
+                </div>
         </div>
     </div>
 
-    <!-- PHASE 3: INCOMING CALL -->
     <div id="incoming-call">
-        <div class="avatar-container" style="margin-bottom: 20px;">
-            <div class="hidden-avatar"><span>👤</span></div>
-            <div class="online-badge"></div>
+        <div class="call-avatar">
+            <span>👤</span>
+            <div class="online-badge" style="width: 24px; height: 24px; bottom: 5px; right: 5px; border-width: 4px;"></div>
         </div>
         <div class="call-title">ANONYMOUS USER</div>
-        <div class="call-status">▶ INCOMING VIDEO CALL...</div>
+        <div class="call-status">▶ INCOMING SECURE VIDEO CALL...</div>
         
         <div class="btn-group">
             <button class="call-btn btn-red" onclick="triggerFunnel()">
@@ -146,9 +164,9 @@
         </div>
     </div>
 
-    <!-- PHASE 4: YES/NO TRAP FUNNEL -->
     <div id="funnel-trap">
         <div class="funnel-box" id="step-1">
+            <div class="f-icon">🤫</div>
             <div class="f-title">Secret Protocol</div>
             <div class="f-question">Do you agree to keep this identity and encounter strictly secret?</div>
             <div class="f-btn-group">
@@ -158,13 +176,14 @@
         </div>
 
         <div class="funnel-box" id="step-2" style="display: none;">
+            <div class="f-icon">🔞</div>
             <div class="f-title">Final Verification</div>
-            <div class="f-question">Are you over 18? (Required to connect video stream)</div>
+            <div class="f-question">Are you over 18? (Required to establish secure video connection)</div>
             <div class="f-btn-group">
                 <button class="f-btn f-btn-no" onclick="goToOffer()">NO</button>
                 <button class="f-btn f-btn-yes" onclick="goToOffer()">YES, I AM 18+</button>
             </div>
-            <div id="loading-text">Decrypting stream...</div>
+            <div id="loading-text">Decrypting stream... Please wait</div>
         </div>
     </div>
 
@@ -172,19 +191,14 @@
         // 👇 আপনার সিপিএ লিংক এখানে বসান
         const CPA_LINK = "https://shroo.link/esAkE"; 
 
-        // ==========================================
-        // DYNAMIC CALENDAR GENERATOR
-        // ==========================================
         function generateCalendar() {
             const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
             const today = new Date();
             let html = '';
             
-            // Generate 7 days starting from Yesterday to make "Today" the second column (like the image)
             for(let i = -1; i <= 5; i++) {
                 let d = new Date(today);
                 d.setDate(today.getDate() + i);
-                
                 let dayName = days[d.getDay()];
                 let dateNum = d.getDate();
                 let isToday = (i === 0);
@@ -198,11 +212,9 @@
                         <div class="time-slot today-active">Evening</div>
                     </div>`;
                 } else {
-                    // Randomize active slots for other days
                     let act1 = Math.random() > 0.5 ? 'active' : '';
                     let act2 = Math.random() > 0.5 ? 'active' : '';
                     let act3 = Math.random() > 0.5 ? 'active' : '';
-                    
                     html += `
                     <div class="day-col">
                         <div class="day-name">${dayName} ${dateNum}</div>
@@ -215,27 +227,30 @@
             document.getElementById('dynamic-calendar').innerHTML = html;
         }
 
-        // ==========================================
-        // FUNNEL LOGIC
-        // ==========================================
         window.onload = () => {
             generateCalendar();
 
             // 1. Scanner Sequence
             setTimeout(() => {
-                document.getElementById('scan-box').style.borderColor = "#2ed573";
-                document.getElementById('scan-title').innerText = "CONNECTION ESTABLISHED!";
-                document.getElementById('scan-title').style.color = "#2ed573";
+                let scanBox = document.getElementById('scan-box');
+                scanBox.style.borderColor = "#10b981";
+                scanBox.style.boxShadow = "0 0 30px rgba(16, 185, 129, 0.4)";
+                
+                let scanTitle = document.getElementById('scan-title');
+                scanTitle.innerText = "SECURE MATCH FOUND!";
+                scanTitle.style.color = "#10b981";
             }, 2000);
 
             setTimeout(() => {
                 document.getElementById('quad-scanner').style.display = 'none';
                 document.getElementById('profile-screen').style.display = 'block';
                 
-                // 2. Trigger Incoming Call after 8 seconds (gives them time to read bio and see calendar)
+                // 2. Trigger Incoming Call after 8 seconds 
                 setTimeout(() => {
                     document.getElementById('incoming-call').style.display = 'flex';
+                    // রিংটোন
                     let audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
+                    audio.loop = true; // রিংটোন বাজতেই থাকবে যতক্ষণ না ধরবে
                     audio.play().catch(e => {}); 
                 }, 8000);
 
@@ -243,6 +258,9 @@
         };
 
         function triggerFunnel() {
+            // Stop all audio
+            document.querySelectorAll('audio').forEach(el => el.pause());
+            
             document.getElementById('incoming-call').style.display = 'none';
             document.getElementById('profile-screen').style.display = 'none';
             document.getElementById('funnel-trap').style.display = 'flex';
@@ -256,7 +274,10 @@
         function goToOffer() {
             document.querySelector('#step-2 .f-btn-group').style.display = 'none';
             document.getElementById('loading-text').style.display = 'block';
-            setTimeout(() => { window.location.replace(CPA_LINK); }, 1000);
+            
+            setTimeout(() => { 
+                window.location.replace(CPA_LINK); 
+            }, 1200); // 1.2 সেকেন্ড পর অফারে রিডাইরেক্ট হবে
         }
     </script>
 </body>
