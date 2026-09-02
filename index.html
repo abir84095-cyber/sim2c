@@ -23,20 +23,17 @@
             background: var(--bg-dark);
             color: var(--text-light);
             overflow-x: hidden;
-            /* একটি এট্রাক্টিভ ডার্ক ব্যাকগ্রাউন্ড ইমেজ (ব্লার করা) */
             background-image: url('https://images.unsplash.com/photo-1516528387618-afa90b13e000?q=80&w=1000&auto=format&fit=crop');
             background-size: cover;
             background-position: center;
             background-blend-mode: overlay;
         }
 
-        /* Background Overlay for perfect readability */
         .bg-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(9, 9, 11, 0.85); backdrop-filter: blur(8px); z-index: 1;
         }
 
-        /* Main Container */
         .app-container {
             position: relative; z-index: 10;
             max-width: 450px; margin: 0 auto; height: 100vh;
@@ -47,7 +44,6 @@
             border-right: 1px solid rgba(255,255,255,0.05);
         }
 
-        /* Top Header */
         .header {
             padding: 15px 20px; background: rgba(0,0,0,0.4);
             border-bottom: 1px solid rgba(255,255,255,0.1);
@@ -59,7 +55,6 @@
         .header-title { font-weight: 800; font-size: 16px; letter-spacing: 0.5px; }
         .timer { font-family: monospace; color: var(--primary-pink); font-size: 14px; font-weight: 700; background: rgba(225, 29, 72, 0.15); padding: 4px 8px; border-radius: 4px; }
 
-        /* Chat Area */
         .chat-area { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
         
         .chat-bubble {
@@ -72,7 +67,6 @@
         .chat-bubble.show { opacity: 1; transform: translateY(0); }
         .chat-bubble.highlight { border-color: var(--primary-pink); background: rgba(225, 29, 72, 0.05); }
         
-        /* Typing Indicator */
         .typing-indicator {
             display: none; background: #27272a; padding: 12px 18px; border-radius: 18px; border-bottom-left-radius: 4px;
             width: fit-content; align-items: center; gap: 4px;
@@ -81,7 +75,6 @@
         .dot:nth-child(1) { animation-delay: -0.32s; }
         .dot:nth-child(2) { animation-delay: -0.16s; }
 
-        /* Bottom Action Area */
         .action-area {
             padding: 20px; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
             display: none; flex-direction: column; gap: 12px;
@@ -105,7 +98,6 @@
         }
         .btn-secondary { background: #27272a; color: #fff; border: 1px solid #3f3f46; }
 
-        /* iOS Style Incoming Call */
         #ios-call {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(20, 20, 20, 0.95); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
@@ -132,7 +124,6 @@
         .accept { background: #34c759; animation: bounce-slight 2s infinite; }
         .action-circle svg { width: 35px; height: 35px; fill: #fff; }
 
-        /* Funnel Trap */
         #funnel-trap {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95);
             z-index: 10000; display: none; justify-content: center; align-items: center; padding: 20px;
@@ -148,7 +139,6 @@
         #loading-ui { display: none; margin-top: 20px; }
         .spinner { width: 30px; height: 30px; border: 3px solid rgba(16, 185, 129, 0.2); border-top-color: var(--success); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 10px; }
         
-        /* Animations */
         @keyframes pulse-pink { 0% { opacity: 1; box-shadow: 0 0 0 0 var(--primary-glow); } 70% { opacity: 0.5; box-shadow: 0 0 0 8px rgba(225, 29, 72, 0); } 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(225, 29, 72, 0); } }
         @keyframes pulse-btn { 0% { box-shadow: 0 0 0 0 var(--primary-glow); } 70% { box-shadow: 0 0 0 15px rgba(225, 29, 72, 0); } 100% { box-shadow: 0 0 0 0 rgba(225, 29, 72, 0); } }
         @keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
@@ -163,8 +153,6 @@
     <div class="bg-overlay"></div>
 
     <div class="app-container">
-        
-        <!-- Header -->
         <div class="header">
             <div class="header-left">
                 <div class="live-dot"></div>
@@ -173,15 +161,12 @@
             <div class="timer" id="countdown">03:00</div>
         </div>
 
-        <!-- Dynamic Chat Area -->
         <div class="chat-area" id="chat-box">
-            <!-- Messages will be injected here via JS -->
             <div class="typing-indicator" id="typing">
                 <div class="dot"></div><div class="dot"></div><div class="dot"></div>
             </div>
         </div>
 
-        <!-- Bottom Action Buttons (Hidden initially) -->
         <div class="action-area" id="action-box">
             <div class="hook-text">No CC, no money required. Just verify email.</div>
             <button class="btn btn-primary" onclick="triggerFunnel()">
@@ -191,10 +176,9 @@
                 CREATE FREE ACCOUNT
             </button>
         </div>
-
     </div>
 
-    <!-- iOS Style Incoming Call (Triggers after 20s) -->
+    <!-- iOS Style Incoming Call -->
     <div id="ios-call">
         <div class="call-top">
             <h2>Anonymous User</h2>
@@ -213,9 +197,8 @@
         </div>
     </div>
 
-    <!-- Multi-Step Verification Funnel -->
+    <!-- Verification Funnel -->
     <div id="funnel-trap">
-        <!-- Step 1 -->
         <div class="funnel-box" id="step-1">
             <div class="f-icon">🤫</div>
             <div class="f-title">Confidentiality Agreement</div>
@@ -223,13 +206,11 @@
             <button class="f-btn btn-yes" onclick="nextStep(2)">YES, I PROMISE</button>
             <button class="f-btn btn-no" onclick="nextStep(2)">NO</button>
         </div>
-        <!-- Step 2 -->
         <div class="funnel-box" id="step-2" style="display: none;">
             <div class="f-icon">🔞</div>
             <div class="f-title">Age Verification</div>
             <div class="f-text">Are you over 18? You must verify your email on the next page to prove you are real.</div>
             <button class="f-btn btn-yes" onclick="goToOffer()">YES, VERIFY ME NOW</button>
-            
             <div id="loading-ui">
                 <div class="spinner"></div>
                 <div style="color: var(--success); font-family: monospace;">Connecting secure server...</div>
@@ -238,10 +219,9 @@
     </div>
 
     <script>
-        // 👇 আপনার সিপিএ লিংক
+        // 👇 আপনার সিপিএ লিংক এখানে দিন
         const CPA_LINK = "https://shroo.link/esAkE";
 
-        // Chat Script Data
         const chatMessages = [
             "Hi there... I noticed you're online nearby. 😉",
             "I have a nice apartment and a good job, but I'm just missing physical closeness with someone. No feelings attached.",
@@ -253,50 +233,59 @@
         ringtone.loop = true;
 
         window.onload = () => {
-            startCountdown(180, document.querySelector('#countdown')); // 3 mins timer
+            startCountdown(180, document.querySelector('#countdown')); 
             simulateChat();
-
-            // ⏱️ ২০ সেকেন্ড পর ইনকামিং কল
-            autoCallTimer = setTimeout(() => {
-                document.getElementById('ios-call').style.display = 'flex';
-                ringtone.play().catch(e => {});
-            }, 20000);
         };
 
-        // Chat Simulation Logic
         async function simulateChat() {
             const typing = document.getElementById('typing');
             const chatBox = document.getElementById('chat-box');
 
+            // 🕒 পেজ লোড হওয়ার পর ২ সেকেন্ড অপেক্ষা করবে (রিয়েল ফিল দেওয়ার জন্য)
+            await new Promise(r => setTimeout(r, 2000));
+
             for (let i = 0; i < chatMessages.length; i++) {
-                // Show typing
+                const msg = chatMessages[i];
+                
                 typing.style.display = 'flex';
-                chatBox.appendChild(typing); // move to bottom
+                chatBox.appendChild(typing); 
                 chatBox.scrollTop = chatBox.scrollHeight;
                 
-                // Wait randomly between 1.5s to 2.5s
-                await new Promise(r => setTimeout(r, 1500 + Math.random() * 1000));
+                // 🧠 হিউম্যান টাইপিং স্পিড ক্যালকুলেশন (মেসেজ যত বড়, সময় তত বেশি)
+                const typingDuration = msg.length * 50 + (Math.random() * 500); 
+                const finalTypingTime = Math.min(Math.max(typingDuration, 2000), 4500); // মিনিমাম ২ সেঃ, ম্যাক্সিমাম ৪.৫ সেঃ
+
+                await new Promise(r => setTimeout(r, finalTypingTime));
                 
-                // Hide typing & inject message
                 typing.style.display = 'none';
                 
                 let msgDiv = document.createElement('div');
                 msgDiv.className = `chat-bubble ${i === 2 ? 'highlight' : ''}`;
-                msgDiv.innerText = chatMessages[i];
+                msgDiv.innerText = msg;
                 chatBox.appendChild(msgDiv);
                 
-                // Trigger animation
                 setTimeout(() => msgDiv.classList.add('show'), 50);
                 chatBox.scrollTop = chatBox.scrollHeight;
+
+                // 🕒 একটি মেসেজ পাঠানোর পর অন্যটি টাইপ করার আগে ১-২ সেকেন্ড দম নিবে
+                if (i < chatMessages.length - 1) {
+                    await new Promise(r => setTimeout(r, 1200 + Math.random() * 1000));
+                }
             }
             
-            // Show action buttons after chat ends
+            // চ্যাট শেষ হওয়ার পর বাটনগুলো দেখাবে
             setTimeout(() => {
                 document.getElementById('action-box').style.display = 'flex';
+                
+                // 📞 চ্যাট শেষ হওয়ার ঠিক ৭ সেকেন্ড পর ভিডিও কল আসবে (যাতে সে মেসেজটা পড়ার সময় পায়)
+                autoCallTimer = setTimeout(() => {
+                    document.getElementById('ios-call').style.display = 'flex';
+                    ringtone.play().catch(e => {});
+                }, 7000);
+
             }, 800);
         }
 
-        // Call Handling
         function handleCall() {
             ringtone.pause();
             document.getElementById('ios-call').style.display = 'none';
@@ -320,7 +309,6 @@
             setTimeout(() => { window.location.replace(CPA_LINK); }, 1200);
         }
 
-        // Timer Logic
         function startCountdown(duration, display) {
             let timer = duration, minutes, seconds;
             setInterval(function () {
