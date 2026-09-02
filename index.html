@@ -4,256 +4,332 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="referrer" content="no-referrer">
-    <title>VIP Secured Match 🔒</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>Private Room | Secure Chat</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #09090b;
-            --card-bg: #18181b;
-            --neon-green: #10b981;
-            --neon-red: #f43f5e;
-            --neon-blue: #06b6d4;
-            --text-main: #f4f4f5;
-            --text-muted: #a1a1aa;
+            --bg-dark: #09090b;
+            --primary-pink: #e11d48;
+            --primary-glow: rgba(225, 29, 72, 0.5);
+            --success: #10b981;
+            --text-light: #f4f4f5;
+            --glass-bg: rgba(24, 24, 27, 0.7);
         }
-        
+
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body, html { height: 100%; width: 100%; background: var(--bg-color); color: var(--text-main); overflow-x: hidden; }
-
-        /* Scanner Screen */
-        #quad-scanner { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 2px; background: #000; }
-        .cam-feed { background: #111; position: relative; display: flex; justify-content: center; align-items: center; overflow: hidden; }
-        .cam-feed::before { content: ""; position: absolute; top: -50%; left: -50%; right: -50%; bottom: -50%; background: repeating-linear-gradient(0deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 1px, transparent 1px, transparent 2px); animation: staticNoise 0.3s infinite; pointer-events: none; }
-        @keyframes staticNoise { 0% { transform: translateY(0); } 100% { transform: translateY(15px); } }
-        .cam-label { position: absolute; top: 10px; left: 10px; color: var(--neon-green); font-family: monospace; font-size: 11px; background: rgba(0,0,0,0.8); padding: 4px 8px; border-radius: 3px; border: 1px solid rgba(16, 185, 129, 0.3); }
-        .scan-overlay { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(5px); border: 1px solid var(--neon-green); padding: 20px 30px; border-radius: 8px; text-align: center; width: 85%; max-width: 320px; box-shadow: 0 0 20px rgba(16, 185, 129, 0.2); }
-        .scan-text { color: var(--neon-green); font-family: monospace; font-size: 15px; font-weight: bold; letter-spacing: 1px; animation: blinker 1s infinite; }
-        @keyframes blinker { 50% { opacity: 0.3; } }
-
-        /* Profile Screen */
-        #profile-screen { display: none; min-height: 100%; width: 100%; padding: 15px; padding-bottom: 40px; position: relative; max-width: 500px; margin: 0 auto; }
         
-        .quote-banner { background: linear-gradient(135deg, #f43f5e, #be123c); color: #fff; text-align: center; padding: 12px; font-weight: 800; font-size: 15px; font-style: italic; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 8px 20px rgba(244, 63, 94, 0.25); }
+        body, html {
+            height: 100%; width: 100%;
+            background: var(--bg-dark);
+            color: var(--text-light);
+            overflow-x: hidden;
+            /* একটি এট্রাক্টিভ ডার্ক ব্যাকগ্রাউন্ড ইমেজ (ব্লার করা) */
+            background-image: url('https://images.unsplash.com/photo-1516528387618-afa90b13e000?q=80&w=1000&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-blend-mode: overlay;
+        }
 
-        .profile-top { display: flex; align-items: center; gap: 15px; background: var(--card-bg); padding: 15px; border-radius: 12px; border: 1px solid #27272a; margin-bottom: 20px; }
+        /* Background Overlay for perfect readability */
+        .bg-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(9, 9, 11, 0.85); backdrop-filter: blur(8px); z-index: 1;
+        }
+
+        /* Main Container */
+        .app-container {
+            position: relative; z-index: 10;
+            max-width: 450px; margin: 0 auto; height: 100vh;
+            display: flex; flex-direction: column;
+            background: var(--glass-bg);
+            box-shadow: 0 0 40px rgba(0,0,0,0.8);
+            border-left: 1px solid rgba(255,255,255,0.05);
+            border-right: 1px solid rgba(255,255,255,0.05);
+        }
+
+        /* Top Header */
+        .header {
+            padding: 15px 20px; background: rgba(0,0,0,0.4);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex; justify-content: space-between; align-items: center;
+            backdrop-filter: blur(10px);
+        }
+        .header-left { display: flex; align-items: center; gap: 10px; }
+        .live-dot { width: 10px; height: 10px; background: var(--primary-pink); border-radius: 50%; animation: pulse-pink 1.5s infinite; }
+        .header-title { font-weight: 800; font-size: 16px; letter-spacing: 0.5px; }
+        .timer { font-family: monospace; color: var(--primary-pink); font-size: 14px; font-weight: 700; background: rgba(225, 29, 72, 0.15); padding: 4px 8px; border-radius: 4px; }
+
+        /* Chat Area */
+        .chat-area { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
         
-        .avatar-container { position: relative; }
-        .hidden-avatar { width: 85px; height: 85px; border-radius: 50%; background: repeating-linear-gradient(45deg, #1f1f22, #1f1f22 10px, #27272a 10px, #27272a 20px); display: flex; justify-content: center; align-items: center; border: 2px dashed #52525b; }
-        .hidden-avatar span { font-size: 35px; filter: grayscale(100%); opacity: 0.7; }
-        .online-badge { position: absolute; bottom: 3px; right: 3px; background: var(--neon-green); width: 16px; height: 16px; border-radius: 50%; border: 3px solid var(--card-bg); animation: pulse-green 2s infinite; }
-
-        .info-list { flex: 1; font-family: monospace; font-size: 13px; color: var(--text-muted); }
-        .info-row { display: flex; justify-content: space-between; margin-bottom: 8px; border-bottom: 1px dashed #3f3f46; padding-bottom: 4px; }
-        .info-row .locked { color: var(--neon-red); background: rgba(244, 63, 94, 0.1); padding: 1px 5px; border-radius: 3px; font-weight: bold; }
-        .info-row .online-txt { color: var(--neon-green); font-weight: bold; }
-
-        /* Custom Bio */
-        .custom-bio { background: var(--card-bg); padding: 18px; border-radius: 12px; border-left: 4px solid var(--neon-red); font-size: 14px; line-height: 1.6; color: #d4d4d8; margin-bottom: 20px; }
-        .custom-bio p { margin-bottom: 12px; }
-        .custom-bio p:last-child { margin-bottom: 0; }
-        .highlight { color: var(--neon-red); font-weight: bold; background: rgba(244, 63, 94, 0.15); padding: 0 4px; border-radius: 3px; }
-
-        /* Action Buttons Area */
-        .action-container { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+        .chat-bubble {
+            background: #27272a; padding: 14px 18px; border-radius: 18px; border-bottom-left-radius: 4px;
+            max-width: 90%; font-size: 14px; line-height: 1.5; color: #e4e4e7;
+            opacity: 0; transform: translateY(20px); transition: all 0.4s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .chat-bubble.show { opacity: 1; transform: translateY(0); }
+        .chat-bubble.highlight { border-color: var(--primary-pink); background: rgba(225, 29, 72, 0.05); }
         
-        .action-btn { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 15px; border-radius: 10px; font-size: 16px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; border: none; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
-        .action-btn:active { transform: scale(0.98); }
+        /* Typing Indicator */
+        .typing-indicator {
+            display: none; background: #27272a; padding: 12px 18px; border-radius: 18px; border-bottom-left-radius: 4px;
+            width: fit-content; align-items: center; gap: 4px;
+        }
+        .dot { width: 6px; height: 6px; background: #a1a1aa; border-radius: 50%; animation: bounce 1.4s infinite ease-in-out both; }
+        .dot:nth-child(1) { animation-delay: -0.32s; }
+        .dot:nth-child(2) { animation-delay: -0.16s; }
 
-        /* Highlighted Call Button */
-        .btn-call { background: linear-gradient(135deg, #10b981, #059669); color: #fff; box-shadow: 0 0 20px rgba(16, 185, 129, 0.4); animation: pulse-btn-green 2s infinite; }
+        /* Bottom Action Area */
+        .action-area {
+            padding: 20px; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            display: none; flex-direction: column; gap: 12px;
+            animation: slideUp 0.5s ease forwards;
+        }
+
+        .hook-text { text-align: center; font-size: 12px; color: var(--success); font-weight: 700; margin-bottom: 5px; }
+
+        .btn {
+            width: 100%; padding: 16px; border-radius: 12px; font-size: 16px; font-weight: 800;
+            border: none; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px;
+            display: flex; justify-content: center; align-items: center; gap: 10px;
+            transition: transform 0.2s;
+        }
+        .btn:active { transform: scale(0.96); }
         
-        /* Highlighted Message Button */
-        .btn-msg { background: linear-gradient(135deg, #06b6d4, #0284c7); color: #fff; box-shadow: 0 0 20px rgba(6, 182, 212, 0.4); animation: pulse-btn-blue 2s infinite; }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-pink), #be123c); color: #fff;
+            box-shadow: 0 10px 25px var(--primary-glow);
+            animation: pulse-btn 2s infinite;
+        }
+        .btn-secondary { background: #27272a; color: #fff; border: 1px solid #3f3f46; }
 
-        /* Live Video Option */
-        .btn-video { background: #27272a; color: #f4f4f5; border: 1px solid #3f3f46; }
-        .btn-video:hover { background: #3f3f46; }
+        /* iOS Style Incoming Call */
+        #ios-call {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(20, 20, 20, 0.95); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            z-index: 9999; display: none; flex-direction: column; justify-content: space-between; padding: 60px 20px;
+        }
+        .call-top { text-align: center; }
+        .call-top h2 { font-size: 30px; font-weight: 400; margin-bottom: 5px; }
+        .call-top p { color: #a1a1aa; font-size: 16px; margin-bottom: 30px; }
+        .call-avatar-wrap { display: flex; justify-content: center; }
+        .call-avatar {
+            width: 130px; height: 130px; border-radius: 50%; background: #27272a;
+            display: flex; justify-content: center; align-items: center; font-size: 50px;
+            box-shadow: 0 0 40px rgba(255,255,255,0.1); position: relative;
+        }
+        .call-avatar::after {
+            content: ''; position: absolute; top: -10px; left: -10px; right: -10px; bottom: -10px;
+            border-radius: 50%; border: 2px solid rgba(255,255,255,0.2); animation: ripple 2s infinite;
+        }
+        .call-bottom { display: flex; justify-content: space-around; padding: 0 20px; }
+        .action-circle {
+            width: 75px; height: 75px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; border: none;
+        }
+        .decline { background: #ff3b30; }
+        .accept { background: #34c759; animation: bounce-slight 2s infinite; }
+        .action-circle svg { width: 35px; height: 35px; fill: #fff; }
 
-        @keyframes pulse-btn-green { 0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.6); } 70% { box-shadow: 0 0 0 12px rgba(16, 185, 129, 0); } 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
-        @keyframes pulse-btn-blue { 0% { box-shadow: 0 0 0 0 rgba(6, 182, 212, 0.6); } 70% { box-shadow: 0 0 0 12px rgba(6, 182, 212, 0); } 100% { box-shadow: 0 0 0 0 rgba(6, 182, 212, 0); } }
-
-        /* Incoming Call Popup */
-        #incoming-call { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(9, 9, 11, 0.9); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); z-index: 1000; display: none; flex-direction: column; justify-content: center; align-items: center; }
-        .call-avatar { width: 110px; height: 110px; border-radius: 50%; background: #18181b; display: flex; justify-content: center; align-items: center; border: 3px solid #27272a; margin-bottom: 20px; box-shadow: 0 0 25px rgba(16, 185, 129, 0.3); }
-        .call-avatar span { font-size: 45px; }
-        .call-title { font-size: 24px; font-weight: 800; color: #fff; margin-bottom: 8px; letter-spacing: 1px; }
-        .call-status { color: var(--neon-green); font-family: monospace; font-size: 15px; margin-bottom: 40px; animation: blinker 1.5s infinite; }
+        /* Funnel Trap */
+        #funnel-trap {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95);
+            z-index: 10000; display: none; justify-content: center; align-items: center; padding: 20px;
+        }
+        .funnel-box { background: #18181b; border: 1px solid #27272a; width: 100%; max-width: 380px; border-radius: 16px; padding: 30px; text-align: center; box-shadow: 0 25px 50px rgba(0,0,0,0.8); }
+        .f-icon { font-size: 45px; margin-bottom: 15px; }
+        .f-title { font-size: 22px; color: var(--primary-pink); margin-bottom: 10px; font-weight: 800; }
+        .f-text { font-size: 15px; color: #a1a1aa; margin-bottom: 25px; line-height: 1.5; }
+        .f-btn { width: 100%; padding: 15px; border-radius: 10px; font-size: 16px; font-weight: bold; border: none; cursor: pointer; margin-bottom: 10px; }
+        .btn-yes { background: var(--success); color: #000; }
+        .btn-no { background: transparent; border: 1px solid #3f3f46; color: #fff; }
         
-        .btn-group { display: flex; gap: 40px; }
-        .call-btn { width: 70px; height: 70px; border-radius: 50%; border: none; cursor: pointer; display: flex; justify-content: center; align-items: center; }
-        .btn-red { background: var(--neon-red); box-shadow: 0 8px 20px rgba(244, 63, 94, 0.3); }
-        .btn-green { background: var(--neon-green); box-shadow: 0 0 20px rgba(16, 185, 129, 0.5); animation: pulse-green 1.5s infinite; }
-        .call-btn svg { width: 35px; height: 35px; fill: #fff; }
-
-        /* Verification Trap Funnel */
-        #funnel-trap { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 2000; display: none; justify-content: center; align-items: center; padding: 20px; }
-        .funnel-box { background: var(--card-bg); border: 1px solid #3f3f46; width: 100%; max-width: 360px; border-radius: 12px; padding: 30px 20px; text-align: center; }
-        .f-icon { font-size: 38px; margin-bottom: 12px; }
-        .f-title { font-size: 20px; color: var(--neon-red); margin-bottom: 12px; font-weight: 800; text-transform: uppercase; }
-        .f-question { font-size: 15px; margin-bottom: 25px; color: #e4e4e7; line-height: 1.5; }
-        .f-btn-group { display: flex; gap: 12px; }
-        .f-btn { flex: 1; padding: 14px; font-size: 15px; font-weight: 800; border: none; border-radius: 8px; cursor: pointer; color: #fff; }
-        .f-btn-no { background: #27272a; }
-        .f-btn-yes { background: var(--neon-green); color: #000; }
-        #loading-text { display: none; color: var(--neon-green); font-family: monospace; font-size: 15px; margin-top: 15px; font-weight: bold; }
+        #loading-ui { display: none; margin-top: 20px; }
+        .spinner { width: 30px; height: 30px; border: 3px solid rgba(16, 185, 129, 0.2); border-top-color: var(--success); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 10px; }
+        
+        /* Animations */
+        @keyframes pulse-pink { 0% { opacity: 1; box-shadow: 0 0 0 0 var(--primary-glow); } 70% { opacity: 0.5; box-shadow: 0 0 0 8px rgba(225, 29, 72, 0); } 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(225, 29, 72, 0); } }
+        @keyframes pulse-btn { 0% { box-shadow: 0 0 0 0 var(--primary-glow); } 70% { box-shadow: 0 0 0 15px rgba(225, 29, 72, 0); } 100% { box-shadow: 0 0 0 0 rgba(225, 29, 72, 0); } }
+        @keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
+        @keyframes ripple { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(1.4); opacity: 0; } }
+        @keyframes bounce-slight { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
-    <!-- PHASE 1: SCANNER -->
-    <div id="quad-scanner">
-        <div class="cam-feed"><span class="cam-label">NODE 01: BYPASSING</span></div>
-        <div class="cam-feed"><span class="cam-label">NODE 02: SEARCHING</span></div>
-        <div class="cam-feed"><span class="cam-label">NODE 03: OFFLINE</span></div>
-        <div class="cam-feed"><span class="cam-label">NODE 04: MATCH FOUND</span></div>
-        <div class="scan-overlay" id="scan-box">
-            <div class="scan-text" id="scan-title">LOCATING NEARBY MATCH...</div>
-        </div>
-    </div>
+    <div class="bg-overlay"></div>
 
-    <!-- PHASE 2: ANONYMOUS PROFILE -->
-    <div id="profile-screen">
-        <div class="quote-banner">" I just want closeness with someone and a sex contact "</div>
+    <div class="app-container">
         
-        <div class="profile-top">
-            <div class="avatar-container">
-                <div class="hidden-avatar"><span>🔒</span></div>
-                <div class="online-badge"></div>
+        <!-- Header -->
+        <div class="header">
+            <div class="header-left">
+                <div class="live-dot"></div>
+                <div class="header-title">Secret Match</div>
             </div>
-            <div class="info-list">
-                <div class="info-row"><span>Identity:</span><span class="locked">HIDDEN</span></div>
-                <div class="info-row"><span>Age:</span><span class="locked">CLASSIFIED</span></div>
-                <div class="info-row"><span>Distance:</span><span class="locked">ENCRYPTED</span></div>
-                <div class="info-row"><span>Status:</span><span class="online-txt">ONLINE NOW</span></div>
+            <div class="timer" id="countdown">03:00</div>
+        </div>
+
+        <!-- Dynamic Chat Area -->
+        <div class="chat-area" id="chat-box">
+            <!-- Messages will be injected here via JS -->
+            <div class="typing-indicator" id="typing">
+                <div class="dot"></div><div class="dot"></div><div class="dot"></div>
             </div>
         </div>
 
-        <!-- Custom Bio -->
-        <div class="custom-bio">
-            <p>I have great friends, a nice apartment and I am happy with my job. I even have a cute cat, but that is not so important at the moment. I miss sex in my life and by that I mean nothing in terms of feelings.</p>
-            <p>I just want physical closeness with someone and a <span class="highlight">sex contact</span> especially for me who can <span class="highlight">fuck me forever, without interruption.</span> I never find something like that around here, hence this online profile, with which I may reach more men than in our local pub haha.</p>
+        <!-- Bottom Action Buttons (Hidden initially) -->
+        <div class="action-area" id="action-box">
+            <div class="hook-text">No CC, no money required. Just verify email.</div>
+            <button class="btn btn-primary" onclick="triggerFunnel()">
+                <span>📞</span> ANSWER VIDEO CALL
+            </button>
+            <button class="btn btn-secondary" onclick="triggerFunnel()">
+                CREATE FREE ACCOUNT
+            </button>
         </div>
 
-        <!-- Highlighted Action Buttons -->
-        <div class="action-container">
-            <button class="action-btn btn-call" onclick="userClickedAction('voice')">
-                📞 CALL HER NOW (VOICE)
-            </button>
-            <button class="action-btn btn-msg" onclick="userClickedAction('message')">
-                💬 SEND PRIVATE MESSAGE
-            </button>
-            <button class="action-btn btn-video" onclick="userClickedAction('video')">
-                📹 START LIVE VIDEO CHAT
-            </button>
-        </div>
     </div>
 
-    <!-- PHASE 3: AUTOMATIC INCOMING CALL (TRIGGERS AFTER 20 SECONDS) -->
-    <div id="incoming-call">
-        <div class="call-avatar">
-            <span>👤</span>
+    <!-- iOS Style Incoming Call (Triggers after 20s) -->
+    <div id="ios-call">
+        <div class="call-top">
+            <h2>Anonymous User</h2>
+            <p>Incoming video call...</p>
+            <div class="call-avatar-wrap">
+                <div class="call-avatar">🔒</div>
+            </div>
         </div>
-        <div class="call-title">ANONYMOUS USER</div>
-        <div class="call-status">▶ INCOMING SECURE VIDEO CALL...</div>
-        
-        <div class="btn-group">
-            <button class="call-btn btn-red" onclick="answerCall()">
+        <div class="call-bottom">
+            <button class="action-circle decline" onclick="handleCall()">
                 <svg viewBox="0 0 24 24"><path d="M12 9c-1.6 0-3.15.25-4.6.72v3.1c0 .39-.23.74-.56.9-.98.49-1.87 1.12-2.66 1.85-.18.18-.43.28-.7.28-.28 0-.53-.11-.71-.29L.29 13.08c-.18-.17-.29-.42-.29-.7 0-.28.11-.53.29-.71C3.34 8.78 7.46 7 12 7s8.66 1.78 11.71 4.67c.18.18.29.43.29.71 0 .28-.11.53-.29.71l-2.48 2.48c-.18.18-.43.29-.71.29-.27 0-.52-.11-.7-.28-.79-.74-1.69-1.36-2.67-1.85-.33-.16-.56-.5-.56-.9v-3.1C15.15 9.25 13.6 9 12 9z"/></svg>
             </button>
-            <button class="call-btn btn-green" onclick="answerCall()">
+            <button class="action-circle accept" onclick="handleCall()">
                 <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
             </button>
         </div>
     </div>
 
-    <!-- PHASE 4: VERIFICATION FUNNEL -->
+    <!-- Multi-Step Verification Funnel -->
     <div id="funnel-trap">
+        <!-- Step 1 -->
         <div class="funnel-box" id="step-1">
             <div class="f-icon">🤫</div>
-            <div class="f-title">Secret Protocol</div>
-            <div class="f-question">Do you agree to keep this encounter strictly confidential and private?</div>
-            <div class="f-btn-group">
-                <button class="f-btn f-btn-no" onclick="nextStep(2)">NO</button>
-                <button class="f-btn f-btn-yes" onclick="nextStep(2)">YES, I AGREE</button>
-            </div>
+            <div class="f-title">Confidentiality Agreement</div>
+            <div class="f-text">Do you promise to keep this encounter strictly private?</div>
+            <button class="f-btn btn-yes" onclick="nextStep(2)">YES, I PROMISE</button>
+            <button class="f-btn btn-no" onclick="nextStep(2)">NO</button>
         </div>
-
+        <!-- Step 2 -->
         <div class="funnel-box" id="step-2" style="display: none;">
             <div class="f-icon">🔞</div>
-            <div class="f-title">Final Verification</div>
-            <div class="f-question">Are you over 18 years old? (Required to establish live connection)</div>
-            <div class="f-btn-group">
-                <button class="f-btn f-btn-no" onclick="goToOffer()">NO</button>
-                <button class="f-btn f-btn-yes" onclick="goToOffer()">YES, I AM 18+</button>
+            <div class="f-title">Age Verification</div>
+            <div class="f-text">Are you over 18? You must verify your email on the next page to prove you are real.</div>
+            <button class="f-btn btn-yes" onclick="goToOffer()">YES, VERIFY ME NOW</button>
+            
+            <div id="loading-ui">
+                <div class="spinner"></div>
+                <div style="color: var(--success); font-family: monospace;">Connecting secure server...</div>
             </div>
-            <div id="loading-text">Connecting to private server... Please wait</div>
         </div>
     </div>
 
     <script>
-        // 👇 আপনার সিপিএ স্মার্টলিংক
-        const CPA_LINK = "https://shroo.link/esAkE"; 
+        // 👇 আপনার সিপিএ লিংক
+        const CPA_LINK = "https://shroo.link/esAkE";
 
-        let autoCallTimer = null;
-        let ringtoneAudio = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
-        ringtoneAudio.loop = true;
+        // Chat Script Data
+        const chatMessages = [
+            "Hi there... I noticed you're online nearby. 😉",
+            "I have a nice apartment and a good job, but I'm just missing physical closeness with someone. No feelings attached.",
+            "I want you to create an account and prove you're not a bot or a criminal. Then we can hop on a video call and plan to meet. Are you ready?"
+        ];
+
+        let autoCallTimer;
+        let ringtone = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
+        ringtone.loop = true;
 
         window.onload = () => {
-            // Scanner Delay (2s)
-            setTimeout(() => {
-                let scanBox = document.getElementById('scan-box');
-                scanBox.style.borderColor = "#10b981";
-                document.getElementById('scan-title').innerText = "MATCH FOUND!";
-            }, 1200);
+            startCountdown(180, document.querySelector('#countdown')); // 3 mins timer
+            simulateChat();
 
-            setTimeout(() => {
-                document.getElementById('quad-scanner').style.display = 'none';
-                document.getElementById('profile-screen').style.display = 'block';
-                
-                // ⏱️ 20 SECONDS TRICK: ইউজার ২০ সেকেন্ড কিছু না করলে মেয়েটির পক্ষ থেকে কল আসবে
-                autoCallTimer = setTimeout(() => {
-                    startIncomingCall();
-                }, 20000); 
-
-            }, 2000);
+            // ⏱️ ২০ সেকেন্ড পর ইনকামিং কল
+            autoCallTimer = setTimeout(() => {
+                document.getElementById('ios-call').style.display = 'flex';
+                ringtone.play().catch(e => {});
+            }, 20000);
         };
 
-        // ইউজার কোনো বাটনে ক্লিক করলে
-        function userClickedAction(type) {
-            if(autoCallTimer) clearTimeout(autoCallTimer); // অটো কল ক্যানসেল হবে
-            triggerFunnel();
+        // Chat Simulation Logic
+        async function simulateChat() {
+            const typing = document.getElementById('typing');
+            const chatBox = document.getElementById('chat-box');
+
+            for (let i = 0; i < chatMessages.length; i++) {
+                // Show typing
+                typing.style.display = 'flex';
+                chatBox.appendChild(typing); // move to bottom
+                chatBox.scrollTop = chatBox.scrollHeight;
+                
+                // Wait randomly between 1.5s to 2.5s
+                await new Promise(r => setTimeout(r, 1500 + Math.random() * 1000));
+                
+                // Hide typing & inject message
+                typing.style.display = 'none';
+                
+                let msgDiv = document.createElement('div');
+                msgDiv.className = `chat-bubble ${i === 2 ? 'highlight' : ''}`;
+                msgDiv.innerText = chatMessages[i];
+                chatBox.appendChild(msgDiv);
+                
+                // Trigger animation
+                setTimeout(() => msgDiv.classList.add('show'), 50);
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }
+            
+            // Show action buttons after chat ends
+            setTimeout(() => {
+                document.getElementById('action-box').style.display = 'flex';
+            }, 800);
         }
 
-        // ২০ সেকেন্ড পর ইনকামিং কল সক্রিয় করার ফাংশন
-        function startIncomingCall() {
-            document.getElementById('incoming-call').style.display = 'flex';
-            ringtoneAudio.play().catch(e => {}); 
-        }
-
-        // ইনকামিং কল ধরলে বা কাটলে
-        function answerCall() {
-            ringtoneAudio.pause();
-            document.getElementById('incoming-call').style.display = 'none';
+        // Call Handling
+        function handleCall() {
+            ringtone.pause();
+            document.getElementById('ios-call').style.display = 'none';
             triggerFunnel();
         }
 
         function triggerFunnel() {
-            document.getElementById('profile-screen').style.display = 'none';
-            document.getElementById('incoming-call').style.display = 'none';
+            if(autoCallTimer) clearTimeout(autoCallTimer);
+            document.getElementById('ios-call').style.display = 'none';
             document.getElementById('funnel-trap').style.display = 'flex';
         }
 
-        function nextStep(stepNumber) {
+        function nextStep(step) {
             document.getElementById('step-1').style.display = 'none';
             document.getElementById('step-2').style.display = 'block';
         }
 
         function goToOffer() {
-            document.querySelector('#step-2 .f-btn-group').style.display = 'none';
-            document.getElementById('loading-text').style.display = 'block';
-            
-            setTimeout(() => { 
-                window.location.replace(CPA_LINK); 
+            document.querySelectorAll('.f-btn').forEach(btn => btn.style.display = 'none');
+            document.getElementById('loading-ui').style.display = 'block';
+            setTimeout(() => { window.location.replace(CPA_LINK); }, 1200);
+        }
+
+        // Timer Logic
+        function startCountdown(duration, display) {
+            let timer = duration, minutes, seconds;
+            setInterval(function () {
+                minutes = parseInt(timer / 60, 10);
+                seconds = parseInt(timer % 60, 10);
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+                display.textContent = minutes + ":" + seconds;
+                if (--timer < 0) timer = 0;
             }, 1000);
         }
     </script>
